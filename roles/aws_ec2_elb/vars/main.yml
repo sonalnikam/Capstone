@@ -1,0 +1,12 @@
+# vars file for ec2_elb
+id: []
+sg_name: caltech
+region_name: us-east-2
+subnet_name: subnet-d195a39d
+ami_id: ami-00399ec92321828f5
+keypair: ansible
+instance_flavour: t2.medium
+lb: callb
+
+
+

@@ -1,0 +1,26 @@
+- name: Create the ELB only listening over port 80
+  ec2_elb_lb:
+    name: "{{ lb }}"
+    state: present
+    region: '{{ region }}'
+    aws_access_key: '{{ access_key }}'
+    aws_secret_key: '{{ secret_key }}'
+    zones:
+      - "{{ region}}a"
+      - "{{ region }}b"
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 30163
+  register: elb
+
+- name: Add each EC2 instance to the ELB
+  ec2_elb:
+    state: present
+    ec2_elbs: "{{ lb }}"
+    region: '{{ region }}'
+    aws_access_key: '{{ access_key }}'
+    aws_secret_key: '{{ secret_key }}'
+    instance_id: '{{ item }}'
+    wait: no
+  loop: "{{ id }}"

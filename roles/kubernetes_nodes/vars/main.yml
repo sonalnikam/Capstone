@@ -1,0 +1,5 @@
+# vars file for kubernetes_nodes
+
+service_names:
+  - 'docker'
+  - 'kubelet'
