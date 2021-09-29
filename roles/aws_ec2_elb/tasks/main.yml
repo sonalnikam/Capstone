@@ -1,16 +1,16 @@
-# tasks file for Capstone
-#- name: install python
-#  apt:
-#    name: python3
-#    state: present
+ # tasks file for Capstone
+- name: install python
+  apt:
+    name: python3
+    state: present
 
-#- name: Install boto for AWS
-#  pip:
-#    name: "{{ item }}"
-#    state: present
-#  with_items:
-#  - boto
-#  - boto3
+- name: Install boto for AWS
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - boto
+  - boto3
 
 - name: Creating Security Group for K8s Cluster
   ec2_group:
