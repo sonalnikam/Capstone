@@ -1,11 +1,4 @@
-- name: create user
-  shell: echo "Y" | sudo adduser sha --disabled-password 
-- name: rights for user
-  command: usermod -aG sudo sha
-- name: Add devops user to the sudoers
-  copy:
-    dest: "/etc/sudoers.d/sha"
-    content: "sha  ALL=(ALL)  NOPASSWD: ALL"
+
 - name: create openssl
   command: openssl genrsa -out  sha.key 2048
 - command: openssl req -new -key sha.key -out sha.csr -subj "/CN=sha/O=dev"

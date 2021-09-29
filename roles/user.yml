@@ -2,9 +2,12 @@
   command: mkdir /home/sha/.ssh
 - name: permission
   command: chmod 700 /home/sha/.ssh
-- name: create file
-  command: touch /home/sha/.ssh/authorized_keys
-- name: permission 
-  command: chmod 600 /home/sha/.ssh/authorized_keys
+  #- name: create file
+  #  command: sudo touch /home/sha/.ssh/authorized_keys
+  # name: permission 
+  #command: sudo chmod 600 /home/sha/.ssh/authorized_keys
 - name: copy file
-  shell: sudo cat /home/ubuntu/.ssh/authorized_keys >> /home/sha/.ssh/authorized_keys
+  command: cp /home/ubuntu/.ssh/authorized_keys /home/sha/.ssh/
+- name: permission
+  command: chmod 600 /home/sha/.ssh/authorized_keys
+

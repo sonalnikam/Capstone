@@ -19,10 +19,10 @@
   register: ip
 - set_fact:
      ips: "{{ ip.stdout }}"
-- shell: kubectl get pods etcd-ip-172-31-33-198 -n kube-system -o=jsonpath='{.spec.containers[0].command}' | jq |  grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" | grep 172 | awk {'print $1'} | more -1
+- shell: kubectl get pods "{{ etcd.stdout }}" -n kube-system -o=jsonpath='{.spec.containers[0].command}' | jq |  grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" | grep 172 | awk {'print $1'} | more -1
   register: a
 - set_fact:
-        ip_corrected: "{{ a.stdout_lines[0] }}"
+    ip_corrected: "{{ a.stdout_lines[0] }}"
 - debug:
     var:  b 
 - name: Created Snapshot
