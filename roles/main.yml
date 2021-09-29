@@ -1,7 +1,7 @@
 - hosts: localhost
   gather_facts: no
   vars_files:
-   - /home/ubuntu/ansible/roles/cred.yml
+   - cred.yml
 
   tasks:
     - name: Running EC2 Role
