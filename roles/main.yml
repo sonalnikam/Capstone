@@ -43,6 +43,7 @@
       - php.yaml
       - redis_follower.yaml
       - redis_leader.yaml
+      - network.yaml
       - csr.yaml
       - dev-role.yaml
       - binding.yaml
@@ -61,6 +62,7 @@
       - /home/ubuntu/php.yaml
       - /home/ubuntu/redis_follower.yaml
       - /home/ubuntu/redis_leader.yaml
+      - /home/ubuntu/network.yaml
      tags: kube
 
 
