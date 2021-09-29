@@ -1,0 +1,16 @@
+
+- name: create openssl
+  command: openssl genrsa -out  sha.key 2048
+- command: openssl req -new -key sha.key -out sha.csr -subj "/CN=sha/O=dev"
+- name: create csr
+  command: kubectl apply -f  csr.yaml
+- name: Approve certificate
+  command: kubectl certificate approve sha
+- name: Create dev namespace
+  command: kubectl create namespace dev
+- name: Create the Dev role
+  command: kubectl apply -f  /home/ubuntu/dev-role.yaml
+- name: binding the role
+  command: kubectl apply -f  /home/ubuntu/binding.yaml
+
+

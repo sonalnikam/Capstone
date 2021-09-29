@@ -1,22 +1,22 @@
 # tasks file for Capstone
-- name: install python
-  apt:
-    name: python3
-    state: present
+#- name: install python
+#  apt:
+#    name: python3
+#    state: present
 
-- name: Install boto for AWS
-  pip:
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - boto
-  - boto3
+#- name: Install boto for AWS
+#  pip:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#  - boto
+#  - boto3
 
 - name: Creating Security Group for K8s Cluster
   ec2_group:
     name: '{{ sg_name }}'
     description: Security Group for allowing all port
-    region: '{{ region_name }}'
+    region: '{{ region }}'
     aws_access_key: '{{ access_key }}'
     aws_secret_key: '{{ secret_key }}'
     rules:
@@ -49,7 +49,7 @@
     count: 1
     vpc_subnet_id: '{{ subnet_name }}'
     assign_public_ip: yes
-    region: '{{ region_name }}'
+    region: '{{ region }}'
     state: present
     aws_access_key: '{{ access_key }}'
     aws_secret_key: '{{ secret_key }}'

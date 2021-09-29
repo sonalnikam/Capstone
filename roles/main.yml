@@ -1,7 +1,8 @@
 - hosts: localhost
   gather_facts: no
   vars_files:
-    - cred.yml
+   - /home/ubuntu/ansible/roles/cred.yml
+
   tasks:
     - name: Running EC2 Role
       include_role:
@@ -23,19 +24,58 @@
       include_role:
         name: kubernetes_nodes
 
-- hosts: ec2_master
+- hosts: linux
   gather_facts: no
   become: true
   tasks:
-  name: Apply yaml  to the cluster.
-  community.kubernetes.k8s:
-    state: present
-    src: "{{ item }}"
-  with_items:
-    - apache.yaml
-    - frontend_deployment.yaml
-    - frontend_node.yaml
-    - metrics.yaml
-    - php.yaml
-    - redis_followers.yaml
-    - redis_leader.yaml
+   - command: mkdir -p $HOME/.kube
+   - command: cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   - command: chown 1000:1000 $HOME/.kube/config
+   - copy:
+        src: "{{ item }}"
+        dest: "/home/ubuntu"
+        mode: 0777
+     with_items:
+      - apache.yaml
+      - frontend_deployment.yaml
+      - frontend_node.yaml
+      - metrics.yaml
+      - php.yaml
+      - redis_follower.yaml
+      - redis_leader.yaml
+      - csr.yaml
+      - dev-role.yaml
+      - binding.yaml
+     tags: kube1
+
+   - name: Apply yaml  to the cluster.
+     command: kubectl apply -f "{{ item }}"
+     # k8s:
+     #  state: present
+     #  src: "{{ item }}"
+     with_items:
+      - /home/ubuntu/apache.yaml
+      - /home/ubuntu/frontend_deployment.yaml
+      - /home/ubuntu/frontend_node.yaml
+      - /home/ubuntu/metrics.yaml
+      - /home/ubuntu/php.yaml
+      - /home/ubuntu/redis_follower.yaml
+      - /home/ubuntu/redis_leader.yaml
+     tags: kube
+
+
+
+- hosts: linux
+  gather_facts: no
+  become: true
+  tasks:
+   - include_tasks: user_rights.yml
+  tags: sonal
+
+- hosts: linux
+  gather_facts: no
+  become: true
+  tasks:
+   - include_tasks: etcd_snapshot.yml
+  tags: sonal1
+

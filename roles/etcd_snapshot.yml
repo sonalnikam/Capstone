@@ -1,0 +1,33 @@
+- name: install the jq pkg
+  command: apt install jq -y
+
+- name: install etcd client
+  command: apt install etcd-client -y
+
+- name: list the pods
+  shell:  kubectl get pods -n kube-system | grep etcd | awk '{print $1}'| grep -v grep
+  register: etcd
+
+- debug:
+    msg: "{{ etcd.stdout }}"
+
+- name: Print the command
+  shell: kubectl get pods "{{ etcd.stdout }}" -n kube-system -o=jsonpath='{.spec.containers[0].command}' | jq
+
+- name: fetching Ip
+  shell: kubectl get pods -n kube-system | grep etcd | grep -v grep | sed 's/etcd-ip-//' | awk '{print $1}'
+  register: ip
+- set_fact:
+     ips: "{{ ip.stdout }}"
+- shell: kubectl get pods etcd-ip-172-31-33-198 -n kube-system -o=jsonpath='{.spec.containers[0].command}' | jq |  grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" | grep 172 | awk {'print $1'} | more -1
+  register: a
+- set_fact:
+        ip_corrected: "{{ a.stdout_lines[0] }}"
+- debug:
+    var:  b 
+- name: Created Snapshot
+  shell: ETCDCTL_API=3 etcdctl snapshot save /tmp/etcdBackup.db --endpoints=https://{{ip_corrected}}:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+
+
+
+
