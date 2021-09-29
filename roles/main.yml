@@ -65,14 +65,14 @@
 
 
 
-- hosts: linux
+- hosts: ec2_master
   gather_facts: no
   become: true
   tasks:
    - include_tasks: user_rights.yml
-  tags: sonal
+  
 
-- hosts: linux
+- hosts: ec2_master
   gather_facts: no
   become: true
   tasks:
