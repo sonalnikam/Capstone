@@ -24,7 +24,7 @@
       include_role:
         name: kubernetes_nodes
 
-- hosts: linux
+- hosts: ec2_master
   gather_facts: no
   become: true
   tasks:
@@ -63,6 +63,19 @@
       - /home/ubuntu/redis_leader.yaml
      tags: kube
 
+
+- hosts: ec2_master
+  gather_facts: no
+  become: true
+  tasks:
+   - include_tasks: user_create.yml
+
+- hosts: ec2_master
+  gather_facts: no
+  become: true
+  become_user: sha
+  tasks:
+   - include_tasks: user.yml 
 
 
 - hosts: ec2_master
